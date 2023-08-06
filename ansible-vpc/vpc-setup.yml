@@ -15,9 +15,6 @@
           tenancy: default
           state: "{{state}}"
           resource_tags:
-            Name: vprofile_VPC
-        register: vpc_out
- 
   # - debug:
   #     vars: vpc_out
 
@@ -95,9 +92,51 @@
 # Creating Internet gateway
     - name: Creating Internet Gateway
       ec2_vpc_igw:
-        vpc_id: "{{vpcout.vpc.id}}"
+        vpc_id: "{{vpc_out.vpc.id}}"
         region: "{{region}}"
         state: "{{state}}"
         resource_tags:
           Name: vprofile_IGW
-      register: igw_out
+      register: IGW_out
+
+# Creating Public Route Table
+    - name: Set up public subnet route table
+      ec2_vpc_route_table:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        tags:
+          Name: vprofile-publicRT
+        subnets:
+          - "{{pubsub1_out.subnet.id}}"
+          - "{{pubsub2_out.subnet.id}}"
+          - "{{pubsub3_out.subnet.id}}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{IGW_out.gateway_id}}"
+      register: pubRT_out
+
+# Creating NAT-GW & EIP if not allocated
+    - name: Create new NATGW & allocate new EIP if NATGW does not yet exist in the subnet.
+      ec2_vpc_nat_gateway:
+        state: "{{state}}"
+        subnet_id: "{{pubsub1_out.subnet.id}}"
+        wait: yes
+        region: "{{region}}"
+        if_exist_do_not_create: true
+      register: NATGW_out
+
+# Creating Private Route Table
+    - name: Set up Private subnet route table
+      ec2_vpc_route_table:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        tags:
+          Name: vprofile-privateRT
+        subnets:
+          - "{{privsub1_out.subnet.id}}"
+          - "{{privsub2_out.subnet.id}}"
+          - "{{privsub3_out.subnet.id}}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ NATGW_out.nat_gateway_id }}"
+      register: privRT_out
