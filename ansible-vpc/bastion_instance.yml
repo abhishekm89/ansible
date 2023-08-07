@@ -1,0 +1,19 @@
+---
+- name: Bastion Host Setup
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+# Importing Variables from vars folder
+    - name: Import Bastion Variables
+      include_vars: vars/bastion_setup
+
+    - name: Import VPC Setup Variables
+      include_vars: vars/output_vars
+      
+# Creating KeyPair for Bastion EC2 Instance
+    - name: Create vprofile ec2 key
+      ec2_key:
+        name: vprofile-bastion_key
+        region: "{{region}}"
+      register: key_out
