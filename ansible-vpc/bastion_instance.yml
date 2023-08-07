@@ -1,9 +1,3 @@
-# Requirements for Bastion Host
-# ansible-galaxy collection install amazon.aws
-# ansible-galaxy collection install community.aws
-# sudo apt-get install python-pip
-# pip install -U boto
-
 ---
 - name: Bastion Host Setup
   hosts: localhost
@@ -64,3 +58,9 @@
         group_id: "{{BastionSG_out.group_id}}"
         vpc_subnet_id: "{{pubsub1id}}" # value from output_vars  
       register: bastionHost_out
+
+# Requirements for Bastion Host
+# ansible-galaxy collection install amazon.aws
+# ansible-galaxy collection install community.aws
+# sudo apt-get install python-pip
+# pip install -U boto
