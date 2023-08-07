@@ -166,7 +166,13 @@
         privsub1id: "{{privsub1_out.subnet.id}}"
         privsub2id: "{{privsub2_out.subnet.id}}"
         privsub3id: "{{privsub3_out.subnet.id}}"
-        igwid: "{{IGW_out.gateway_id}}"
         natgwid: "{{NATGW_out.nat_gateway_id}}"
         pubrtid: "{{pubRT_out.route_table.id}}"
         privrtid: "{{privRT_out.route_table.id}}"
+        igwid: "{{IGW_out.gateway_id}}"
+        cacheable: yes
+
+    - name: Creat Variables File for VPC Output
+      copy:
+        content: "vpcid: {{vpc_out.vpc.id}}\npubsub1id: {{pubsub1_out.subnet.id}}\npubsub2id: {{pubsub2_out.subnet.id}}\npusub3id: {{pubsub3_out.subnet.id}}\nprivsub1id: {{privsub1_out.subnet.id}}\nprivsub2id: {{privsub2_out.subnet.id}}\nprivsub3id: {{privsub3_out.subnet.id}}\nnatgwid: {{NATGW_out.nat_gateway_id}}\npubrtid: {{pubRT_out.route_table.id}}\nprivrtid: {{privRT_out.route_table.id}}\nigwid: {{IGW_out.gateway_id}}"
+        dest: vars/output_vars
