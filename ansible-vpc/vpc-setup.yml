@@ -1,4 +1,4 @@
-- host: localhost
+- hosts: localhost
   connection: local
   gather_facts: False
   tasks:
@@ -156,3 +156,17 @@
         - NATGW_out.nat_gateway_id
         - pubRT_out.route_table.id
         - privRT_out.route_table.id
+
+# Creating FactVariables
+    - set_facts:
+        vpcid: "{{vpc_out.vpc.id}}"
+        pubsub1id: "{{pubsub1_out.subnet.id}}"
+        pubsub2id: "{{pubsub2_out.subnet.id}}"
+        pubsub3id: "{{pubsub3_out.subnet.id}}"
+        privsub1id: "{{privsub1_out.subnet.id}}"
+        privsub2id: "{{privsub2_out.subnet.id}}"
+        privsub3id: "{{privsub3_out.subnet.id}}"
+        igwid: "{{IGW_out.gateway_id}}"
+        natgwid: "{{NATGW_out.nat_gateway_id}}"
+        pubrtid: "{{pubRT_out.route_table.id}}"
+        privrtid: "{{privRT_out.route_table.id}}"
