@@ -7,14 +7,13 @@
 # Creating VPC
     - name: Creating VProfile VPC
       ec2_vpc_net:
-        name:
-          cidr_block: "{{vpcCIDR}}"
-          region: "{{region}}"
-          dns_support: yes
-          dns_hostnames: yes
-          tenancy: default
-          state: "{{state}}"
-          resource_tags:
+        name: "{{vpc_name}}"
+        cidr_block: "{{vpcCIDR}}"
+        region: "{{region}}"
+        dns_support: yes
+        dns_hostnames: yes
+        tenancy: default
+        state: "{{state}}"
   # - debug:
   #     vars: vpc_out
 
