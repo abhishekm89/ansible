@@ -1,0 +1,24 @@
+---
+- name: Setup vProfile EC2 Stack
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Import VPC Setup Variables
+      include_vars: vars/output_vars
+
+    - name: Import vProfile Stack Setup Variables
+      include_vars: vars/vprofile-stack
+
+    - name: Create vProfile EC2 KeyPairey
+      ec2_key:
+        name: vProfile_key
+        region: "{{region}}"
+      register: vProfile_key
+
+    - name: Save Private Key into file vProfile_key.pem
+      copy:
+        content: "{{vProfile_key.key.private_key}}"
+        dest: "./vProfile_key.pem"
+        mode: 0600
+      when: vProfile_key.changed
